@@ -1,5 +1,6 @@
 package com.senior.project.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -25,7 +26,7 @@ import java.time.LocalDateTime;
 public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long feedbackId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_id", nullable = false)
@@ -35,6 +36,7 @@ public class Feedback {
     @JoinColumn(name = "manager_id", nullable = false)
     private User manager;
 
+    @Column(columnDefinition = "TEXT")
     private String comment;
 
     private LocalDateTime createdAt;

@@ -48,7 +48,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         Report report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new RuntimeException("Report not found with ID: " + reportId));
 
-        List<Feedback> feedbackList = feedbackRepository.findByReport(report.getReportId());
+        List<Feedback> feedbackList = feedbackRepository.findByReportId(report.getId());
         return feedbackList.stream()
                 .map(feedbackMapper::toFeedbackDto)
                 .collect(Collectors.toList());

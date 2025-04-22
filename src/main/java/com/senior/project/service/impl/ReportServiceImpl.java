@@ -26,7 +26,7 @@ public class ReportServiceImpl implements ReportService {
     @Transactional
     public ReportDto createReport(ReportCreateDto reportCreateDto) {
         // Преобразуем запрос в сущность Report
-        Report report = reportMapper.toEntity(reportCreateDto);
+        Report report = reportMapper.toReportEntity(reportCreateDto);
         report = reportRepository.save(report); // Сохраняем отчёт в БД
         return reportMapper.toReportDto(report); // Возвращаем DTO
     }

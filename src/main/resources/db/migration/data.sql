@@ -1,0 +1,26 @@
+INSERT INTO users (email, password, username, full_name, role)
+VALUES
+    ('admin@example.com', 'adminpass', 'admin', 'Админ Админович', 'ADMIN'),
+    ('manager1@example.com', 'managerpass1', 'manager1', 'Менеджер Один', 'MANAGER'),
+    ('manager2@example.com', 'managerpass2', 'manager2', 'Менеджер Два', 'MANAGER'),
+    ('user1@example.com', 'userpass1', 'user1', 'Сотрудник Один', 'USER'),
+    ('user2@example.com', 'userpass2', 'user2', 'Сотрудник Два', 'USER'),
+    ('user3@example.com', 'userpass3', 'user3', 'Сотрудник Три', 'USER');
+
+-- Вставка отчетов
+INSERT INTO reports (user_id, week_start, accomplishments, challenges, plans)
+VALUES
+    (4, '2024-04-01', 'Завершён проект X', 'Недостаток времени', 'Начать проект Y'),
+    (4, '2024-04-08', 'Разработка модуля A', 'Баги в коде', 'Починить баги и написать тесты'),
+    (5, '2024-04-01', 'Изучил Hibernate', 'Сложности с аннотациями', 'Писать больше практики'),
+    (5, '2024-04-08', 'Внедрил авторизацию', 'Проблемы с JWT', 'Докрутить безопасность'),
+    (6, '2024-04-01', 'Создана база данных', 'Проблемы с связями', 'Тестировать интеграции');
+
+-- Вставка отзывов
+INSERT INTO feedback (report_id, manager_id, comment)
+VALUES
+    (1, 2, 'Отличная работа! Продолжай в том же духе.'),
+    (2, 2, 'Нужно больше проработки планов.'),
+    (3, 3, 'Хороший прогресс.'),
+    (4, 3, 'Пожалуйста, напиши подробнее о проблемах.'),
+    (5, 2, 'Следующий раз оформляй подробнее.');

@@ -1,5 +1,6 @@
 package com.senior.project.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -26,18 +27,22 @@ import java.time.LocalDateTime;
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reportId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(nullable = false)
     private LocalDate weekStart;
 
+    @Column(columnDefinition = "TEXT")
     private String accomplishments;
 
+    @Column(columnDefinition = "TEXT")
     private String challenges;
 
+    @Column(columnDefinition = "TEXT")
     private String plans;
 
     private LocalDateTime submittedAt;
