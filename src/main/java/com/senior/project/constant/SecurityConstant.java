@@ -6,7 +6,7 @@ public class SecurityConstant {
     public static final String FORBIDDEN_MESSAGE = "Login is needed to access this page";
     public static final String[] PUBLIC_URLS = {
             "/api/auth/login",
-            "/api/auth/signup",
+            "/api/auth/register",
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/h2-console/**",
