@@ -7,12 +7,15 @@ import com.senior.project.mappers.UserMapper;
 import com.senior.project.repository.UserRepository;
 import com.senior.project.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -63,10 +66,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 String.format("Username '%s' not found", username)
         ));
 
+        List<GrantedAuthority> authorities = user.getAuthorities() == null
+                ? Collections.emptyList()
+                : Arrays.stream(user.getAuthorities())
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
-                Stream.of(user.getAuthorities()).map(SimpleGrantedAuthority::new).collect(Collectors.toList())
+                authorities
         );
     }
 }
