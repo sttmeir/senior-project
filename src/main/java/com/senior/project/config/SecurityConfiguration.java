@@ -37,6 +37,9 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_URLS).permitAll()
+                        .requestMatchers("/api/reports/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+                        .requestMatchers("/api/team/**").hasAnyRole("MANAGER")
+                        .requestMatchers("/api/admin/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated())
                 .authenticationManager(authenticationManager)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))

@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,8 @@ public class ReportController {
 
     private final ReportService reportService;
 
+    // Только для USER, MANAGER, ADMIN
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Создать новый отчёт")
     public ResponseEntity<ReportDto> createReport(@Valid @RequestBody ReportCreateDto reportCreateDto) {
@@ -36,18 +39,24 @@ public class ReportController {
         return ResponseEntity.status(HttpStatus.CREATED).body(reportDto);
     }
 
+    // Только для MANAGER и ADMIN
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @GetMapping
     @Operation(summary = "Получить все отчёты")
     public ResponseEntity<List<ReportDto>> getAllReports() {
         return ResponseEntity.ok(reportService.getAllReports());
     }
 
+    // Доступ только для USER, MANAGER, ADMIN, но с проверкой прав
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     @GetMapping("/{id}")
     @Operation(summary = "Получить отчёт по ID")
     public ResponseEntity<ReportDto> getReportById(@PathVariable Long id) {
         return ResponseEntity.ok(reportService.getReportById(id));
     }
 
+    // Только для MANAGER и ADMIN
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Обновить отчёт по ID")
     public ResponseEntity<ReportDto> updateReport(@PathVariable Long id, @Valid @RequestBody ReportUpdateDto reportUpdateDto) {
@@ -55,6 +64,8 @@ public class ReportController {
         return ResponseEntity.ok(reportDto);
     }
 
+    // Только для ADMIN
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Удалить отчёт по ID")
     public ResponseEntity<Void> deleteReport(@PathVariable Long id) {

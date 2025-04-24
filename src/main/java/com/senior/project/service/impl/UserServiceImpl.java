@@ -2,6 +2,7 @@ package com.senior.project.service.impl;
 
 
 import com.senior.project.domain.User;
+import com.senior.project.dto.UserCreateDto;
 import com.senior.project.dto.UserDto;
 import com.senior.project.mappers.UserMapper;
 import com.senior.project.repository.UserRepository;
@@ -57,6 +58,32 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.save(user);
     }
 
+    @Override
+    public List<UserDto> getTeamByManager(User manager) {
+        // Получаем всех пользователей, у которых этот менеджер является supervisor
+        List<User> team = userRepository.findBySupervisorId(manager.getId());
+        return team.stream()
+                .map(userMapper::toUserDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDto createUser(UserCreateDto userCreateDto) {
+        // Преобразуем DTO в сущность User
+        User user = userMapper.toUserEntity(userCreateDto);
+
+        // Сохраняем нового пользователя в базе данных
+        user = userRepository.save(user);
+
+        // Преобразуем сохраненного пользователя в DTO и возвращаем
+        return userMapper.toUserDto(user);
+    }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
     public Optional<User> getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -78,4 +105,5 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 authorities
         );
     }
+
 }

@@ -1,6 +1,7 @@
 package com.senior.project.mappers;
 
 import com.senior.project.domain.User;
+import com.senior.project.dto.UserCreateDto;
 import com.senior.project.dto.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -18,4 +19,6 @@ public interface UserMapper {
     List<UserDto> toDtoList(List<User> users);
 
     List<User> toEntityList(List<UserDto> userDtos);
+
+    User toUserEntity(UserCreateDto userCreateDto);
 }

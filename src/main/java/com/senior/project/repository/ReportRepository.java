@@ -12,4 +12,5 @@ import java.util.List;
 public interface ReportRepository extends JpaRepository<Report, Long> {
     List<Report> findAllByUser(User user);
     boolean existsByUserAndWeekStart(User user, LocalDate weekStart);
+    List<Report> findByUserIn(List<User> users);
 }

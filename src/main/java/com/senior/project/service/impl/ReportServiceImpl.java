@@ -1,12 +1,14 @@
 package com.senior.project.service.impl;
 
 import com.senior.project.domain.Report;
+import com.senior.project.domain.User;
 import com.senior.project.dto.ReportCreateDto;
 import com.senior.project.dto.ReportDto;
 import com.senior.project.dto.ReportUpdateDto;
 import com.senior.project.exception.ResourceNotFoundException;
 import com.senior.project.mappers.ReportMapper;
 import com.senior.project.repository.ReportRepository;
+import com.senior.project.repository.UserRepository;
 import com.senior.project.service.ReportService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ public class ReportServiceImpl implements ReportService {
 
     private final ReportRepository reportRepository;
     private final ReportMapper reportMapper;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional
@@ -75,4 +78,22 @@ public class ReportServiceImpl implements ReportService {
         // Удаляем отчёт
         reportRepository.delete(report);
     }
+
+    @Override
+    public List<ReportDto> getReportsByUser(User user) {
+        List<Report> reports = reportRepository.findAllByUser(user);
+        return reports.stream()
+                .map(reportMapper::toReportDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ReportDto> getReportsBySupervisor(User supervisor) {
+        List<User> team = userRepository.findBySupervisorId(supervisor.getId());
+        List<Report> reports = reportRepository.findByUserIn(team);
+        return reports.stream()
+                .map(reportMapper::toReportDto)
+                .collect(Collectors.toList());
+    }
+
 }

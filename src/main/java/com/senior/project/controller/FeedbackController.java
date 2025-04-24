@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/feedback")
 @RequiredArgsConstructor
-@Tag(name = "Обратная связь", description = "Операции с отзывами менеджеров")
+@Tag(name = "Feedback", description = "Операции с отзывами менеджеров")
 public class FeedbackController {
 
     private final FeedbackService feedbackService;

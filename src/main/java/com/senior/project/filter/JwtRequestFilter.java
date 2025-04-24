@@ -1,6 +1,8 @@
 package com.senior.project.filter;
 
 import com.senior.project.config.JwtHelper;
+import com.senior.project.domain.User;
+import com.senior.project.service.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -26,6 +29,7 @@ import static com.senior.project.constant.SecurityConstant.TOKEN_PREFIX;
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final JwtHelper jwtHelper;
+    private final UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -44,11 +48,23 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UsernamePasswordAuthenticationToken token =  new UsernamePasswordAuthenticationToken(
-                    username, null, jwtHelper.getRoles(jwt).stream()
-                    .map(SimpleGrantedAuthority::new).collect(Collectors.toList())
-            );
-            SecurityContextHolder.getContext().setAuthentication(token);
+            try {
+                System.out.println("Setting authentication for user: " + username);
+                // Создаем объект аутентификации
+                User user = userService.findByUsername(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                        user,null, jwtHelper.getRoles(jwt).stream()
+                        .map(SimpleGrantedAuthority::new).collect(Collectors.toList())
+                );
+                // Устанавливаем аутентификацию в контекст
+                SecurityContextHolder.getContext().setAuthentication(token);
+                log.debug("Authentication set for user: " + username);
+                System.out.println("Authentication set for user: " + username);
+                System.out.println("Token: " + token);
+            } catch (Exception e) {
+                log.error("Error setting authentication", e);
+            }
         }
         filterChain.doFilter(request, response);
     }

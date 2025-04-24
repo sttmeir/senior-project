@@ -1,6 +1,8 @@
 package com.senior.project.domain;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +19,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "reports")
@@ -44,6 +47,13 @@ public class Report {
 
     @Column(columnDefinition = "TEXT")
     private String plans;
+
+    private Integer productivityRating;
+
+    @ElementCollection
+    @CollectionTable(name = "report_improvement_areas", joinColumns = @JoinColumn(name = "report_id"))
+    @Column(name = "area")
+    private Set<String> areasForImprovement;
 
     private LocalDateTime submittedAt;
 
