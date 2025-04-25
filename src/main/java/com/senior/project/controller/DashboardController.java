@@ -7,6 +7,7 @@ import com.senior.project.dto.DashboardDto;
 import com.senior.project.service.CheckInService;
 import com.senior.project.service.GoalService;
 import com.senior.project.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ public class DashboardController {
     private final UserService userService;
 
     @GetMapping
+    @Operation(summary = "Get Dashboard", description = "Retrieves the dashboard information for the authenticated user, including their goals and check-ins.")
     public ResponseEntity<DashboardDto> getDashboard(@AuthenticationPrincipal User user) {
 
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

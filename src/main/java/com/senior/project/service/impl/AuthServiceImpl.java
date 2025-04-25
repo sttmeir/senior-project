@@ -6,6 +6,7 @@ import com.senior.project.dto.securitydto.JwtRequestDto;
 import com.senior.project.dto.securitydto.RegisterUserDto;
 import com.senior.project.enums.Role;
 import com.senior.project.service.AuthService;
+import com.senior.project.service.UserValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +22,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtHelper jwtHelper;
     private final PasswordEncoder passwordEncoder;
+    private final UserValidationService userValidationService;
 
     @Override
     public String login(JwtRequestDto authRequest) {
@@ -35,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public User signup(RegisterUserDto registrationUserDto) {
+        userValidationService.validateUser(registrationUserDto);
         User user = new User();
         user.setFullName(registrationUserDto.getName());
         user.setUsername(registrationUserDto.getUsername());

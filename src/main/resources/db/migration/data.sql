@@ -24,3 +24,22 @@ VALUES
     (3, 3, 'Хороший прогресс.'),
     (4, 3, 'Пожалуйста, напиши подробнее о проблемах.'),
     (5, 2, 'Следующий раз оформляй подробнее.');
+
+-- Вставка администратора
+INSERT INTO users (email, password, username, full_name, role, created_at, supervisor_id)
+VALUES
+    ('admin@domain.com', 'password123', 'admin', 'Admin User', 'ADMIN', '2025-04-25T14:00:00', NULL);
+
+-- Вставка менеджера
+INSERT INTO users (email, password, username, full_name, role, created_at, supervisor_id)
+VALUES
+    ('manager@domain.com', 'password123', 'manager', 'Manager User', 'MANAGER', '2025-04-25T14:00:00', 1); -- Подчиняется администратору
+
+-- Вставка пользователей, подчиняющихся менеджеру
+INSERT INTO users (email, password, username, full_name, role, created_at, supervisor_id)
+VALUES
+    ('user1@domain.com', 'password123', 'user1', 'User One', 'USER', '2025-04-25T14:00:00', 2), -- Подчиняется менеджеру
+    ('user2@domain.com', 'password123', 'user2', 'User Two', 'USER', '2025-04-25T14:00:00', 2), -- Подчиняется менеджеру
+    ('user3@domain.com', 'password123', 'user3', 'User Three', 'USER', '2025-04-25T14:00:00', 2), -- Подчиняется менеджеру
+    ('user4@domain.com', 'password123', 'user4', 'User Four', 'USER', '2025-04-25T14:00:00', 2), -- Подчиняется менеджеру
+    ('user5@domain.com', 'password123', 'user5', 'User Five', 'USER', '2025-04-25T14:00:00', 2); -- Подчиняется менеджеру

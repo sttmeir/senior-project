@@ -25,47 +25,38 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/reports")
 @RequiredArgsConstructor
-@Tag(name = "Отчёты", description = "Операции с отчётами")
+@Tag(name = "Reports", description = "Operations related to reports")
 public class ReportController {
 
     private final ReportService reportService;
 
-    // Только для USER, MANAGER, ADMIN
-//    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     @PostMapping
-    @Operation(summary = "Создать новый отчёт")
+    @Tag(name = "Reports", description = "Operations related to reports")
     public ResponseEntity<ReportDto> createReport(@Valid @RequestBody ReportCreateDto reportCreateDto) {
         ReportDto reportDto = reportService.createReport(reportCreateDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(reportDto);
     }
 
-    // Только для MANAGER и ADMIN
-//    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @GetMapping
-    @Operation(summary = "Получить все отчёты")
+    @Operation(summary = "Get all reports", description = "Retrieves a list of all reports. Accessible by authorized users.")
     public ResponseEntity<List<ReportDto>> getAllReports() {
         return ResponseEntity.ok(reportService.getAllReports());
     }
 
-    // Доступ только для USER, MANAGER, ADMIN, но с проверкой прав
-//    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     @GetMapping("/{id}")
-    @Operation(summary = "Получить отчёт по ID")
+    @Operation(summary = "Get report by ID", description = "Retrieves a specific report by its unique ID.")
     public ResponseEntity<ReportDto> getReportById(@PathVariable Long id) {
         return ResponseEntity.ok(reportService.getReportById(id));
     }
 
-    // Только для MANAGER и ADMIN
-//    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @PutMapping("/{id}")
-    @Operation(summary = "Обновить отчёт по ID")
+    @Operation(summary = "Update report by ID", description = "Updates a report with new details by its ID.")
     public ResponseEntity<ReportDto> updateReport(@PathVariable Long id, @Valid @RequestBody ReportUpdateDto reportUpdateDto) {
         ReportDto reportDto = reportService.updateReport(id, reportUpdateDto);
         return ResponseEntity.ok(reportDto);
     }
 
-    // Только для ADMIN
-//    @PreAuthorize("hasRole('ADMIN')")
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Удалить отчёт по ID")
     public ResponseEntity<Void> deleteReport(@PathVariable Long id) {

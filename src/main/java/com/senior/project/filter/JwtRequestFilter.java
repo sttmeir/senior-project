@@ -33,6 +33,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        final String requestPath = request.getServletPath();
+        if (requestPath.contains("/auth/login") || requestPath.contains("/auth/register") || 
+            requestPath.contains("/api/auth/login") || requestPath.contains("/api/auth/register")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String authHeader = request.getHeader("Authorization");
         String username = null;
         String jwt = null;
@@ -48,23 +55,27 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                             user, null, jwtHelper.getRoles(jwt).stream()
                             .map(SimpleGrantedAuthority::new).collect(Collectors.toList())
                     );
+                    token.setDetails(request);
                     SecurityContextHolder.getContext().setAuthentication(token);
                     log.debug("Authentication set for user: {}", username);
                 }
             } catch (ExpiredJwtException e) {
                 log.error("Token is expired");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Token has expired");
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\":\"Token has expired\"}");
                 return;
             } catch(SignatureException e) {
                 log.error("Invalid token signature");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Invalid token signature");
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\":\"Invalid token signature\"}");
                 return;
             } catch (Exception e) {
                 log.error("Authentication error: {}", e.getMessage());
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Authentication failed");
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\":\"Authentication failed\"}");
                 return;
             }
         }

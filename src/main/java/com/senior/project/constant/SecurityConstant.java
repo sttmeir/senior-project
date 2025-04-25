@@ -7,6 +7,8 @@ public class SecurityConstant {
     public static final String[] PUBLIC_URLS = {
             "/api/auth/login",
             "/api/auth/register",
+            "/auth/login",
+            "/auth/register",
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/h2-console/**",

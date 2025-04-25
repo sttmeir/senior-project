@@ -20,14 +20,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@Tag(name = "Аутентификация")
+@Tag(name = "Authentication", description = "Operations related to user authentication and registration")
 @Slf4j
 public class AuthController {
 
     private final AuthServiceImpl authService;
 
+    /**
+     * Endpoint for logging in to the system.
+     *
+     * @param jwtRequestDto Contains the username and password for login.
+     * @return JWT token if login is successful.
+     * @throws Exception If login fails due to incorrect credentials.
+     */
     @PostMapping("/login")
-    @Operation(summary = "Вход в систему")
+    @Operation(summary = "User login", description = "Authenticate the user with their username and password to receive a JWT token.")
     public ResponseEntity<?> login(@Valid @RequestBody JwtRequestDto jwtRequestDto) {
         log.info("Login request received for user: {}", jwtRequestDto.getUsername());
         try {
@@ -40,8 +47,14 @@ public class AuthController {
         }
     }
 
+    /**
+     * Endpoint for registering a new user.
+     *
+     * @param registerUserDto Contains the details of the user to be registered.
+     * @return The registered user object.
+     */
     @PostMapping("/register")
-    @Operation(summary = "Регистрация нового пользователя")
+    @Operation(summary = "User registration", description = "Register a new user with the provided details.")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDto registerUserDto) {
         User user = authService.signup(registerUserDto);
         return new ResponseEntity<>(user, HttpStatus.CREATED);

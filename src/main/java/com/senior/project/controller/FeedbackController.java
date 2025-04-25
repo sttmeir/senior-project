@@ -22,27 +22,27 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/feedback")
 @RequiredArgsConstructor
-@Tag(name = "Feedback", description = "Операции с отзывами менеджеров")
+@Tag(name = "Feedback", description = "Operations with manager feedbacks")
 public class FeedbackController {
 
     private final FeedbackService feedbackService;
 
     @PostMapping
-    @Operation(summary = "Добавить отзыв на отчёт")
+    @Operation(summary = "Add feedback on a report", description = "Allows the manager to provide feedback on a report. The feedback is saved and returned in the response.")
     public ResponseEntity<FeedbackDto> addFeedback(@Valid @RequestBody FeedbackCreateDto feedbackCreateDto) {
         FeedbackDto saved = feedbackService.createFeedback(feedbackCreateDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @GetMapping("/report/{reportId}")
-    @Operation(summary = "Получить отзывы по ID отчёта")
+    @Operation(summary = "Get feedback by report ID", description = "Retrieves all feedback for a specific report based on the report ID.")
     public ResponseEntity<List<FeedbackDto>> getFeedbackByReport(@PathVariable Long reportId) {
         List<FeedbackDto> feedbackList = feedbackService.getFeedbackByReportId(reportId);
         return ResponseEntity.ok(feedbackList);
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Удалить отзыв по ID")
+    @Operation(summary = "Delete feedback by ID", description = "Deletes the feedback for the given ID.")
     public ResponseEntity<Void> deleteFeedback(@PathVariable Long id) {
         feedbackService.deleteFeedback(id);
         return ResponseEntity.noContent().build();

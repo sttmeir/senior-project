@@ -15,8 +15,6 @@ public interface UserService {
     void deleteUser(Long id);
     User saveUser(User user);
     List<UserDto> getTeamByManager(User manager);
-
-    // Создать нового пользователя
     UserDto createUser(UserCreateDto userCreateDto);
     Optional<User> findByUsername(String username);
 }
