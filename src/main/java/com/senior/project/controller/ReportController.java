@@ -58,7 +58,7 @@ public class ReportController {
 
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Удалить отчёт по ID")
+    @Operation(summary = "Delete report by ID", description = "Deletes a report by its ID.")
     public ResponseEntity<Void> deleteReport(@PathVariable Long id) {
         reportService.deleteReport(id);
         return ResponseEntity.noContent().build();
