@@ -31,7 +31,7 @@ public class ReportController {
     private final ReportService reportService;
 
     // Только для USER, MANAGER, ADMIN
-    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Создать новый отчёт")
     public ResponseEntity<ReportDto> createReport(@Valid @RequestBody ReportCreateDto reportCreateDto) {
@@ -40,7 +40,7 @@ public class ReportController {
     }
 
     // Только для MANAGER и ADMIN
-    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @GetMapping
     @Operation(summary = "Получить все отчёты")
     public ResponseEntity<List<ReportDto>> getAllReports() {
@@ -48,7 +48,7 @@ public class ReportController {
     }
 
     // Доступ только для USER, MANAGER, ADMIN, но с проверкой прав
-    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     @GetMapping("/{id}")
     @Operation(summary = "Получить отчёт по ID")
     public ResponseEntity<ReportDto> getReportById(@PathVariable Long id) {
@@ -56,7 +56,7 @@ public class ReportController {
     }
 
     // Только для MANAGER и ADMIN
-    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Обновить отчёт по ID")
     public ResponseEntity<ReportDto> updateReport(@PathVariable Long id, @Valid @RequestBody ReportUpdateDto reportUpdateDto) {
@@ -65,7 +65,7 @@ public class ReportController {
     }
 
     // Только для ADMIN
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Удалить отчёт по ID")
     public ResponseEntity<Void> deleteReport(@PathVariable Long id) {

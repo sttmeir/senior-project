@@ -41,29 +41,31 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             jwt = authHeader.substring(7);
             try {
                 username = jwtHelper.getUsername(jwt);
+                if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    User user = userService.findByUsername(username)
+                            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                    UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                            user, null, jwtHelper.getRoles(jwt).stream()
+                            .map(SimpleGrantedAuthority::new).collect(Collectors.toList())
+                    );
+                    SecurityContextHolder.getContext().setAuthentication(token);
+                    log.debug("Authentication set for user: {}", username);
+                }
             } catch (ExpiredJwtException e) {
-                log.debug("Token is expired");
+                log.error("Token is expired");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Token has expired");
+                return;
             } catch(SignatureException e) {
-                log.debug("Signature is incorrect");
-            }
-        }
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            try {
-                System.out.println("Setting authentication for user: " + username);
-                // Создаем объект аутентификации
-                User user = userService.findByUsername(username)
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                        user,null, jwtHelper.getRoles(jwt).stream()
-                        .map(SimpleGrantedAuthority::new).collect(Collectors.toList())
-                );
-                // Устанавливаем аутентификацию в контекст
-                SecurityContextHolder.getContext().setAuthentication(token);
-                log.debug("Authentication set for user: " + username);
-                System.out.println("Authentication set for user: " + username);
-                System.out.println("Token: " + token);
+                log.error("Invalid token signature");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Invalid token signature");
+                return;
             } catch (Exception e) {
-                log.error("Error setting authentication", e);
+                log.error("Authentication error: {}", e.getMessage());
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Authentication failed");
+                return;
             }
         }
         filterChain.doFilter(request, response);

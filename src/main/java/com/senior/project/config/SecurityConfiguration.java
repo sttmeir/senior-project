@@ -31,15 +31,19 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
         return http
-                .cors(AbstractHttpConfigurer::disable)
+//                .cors(cors -> cors.configurationSource(request -> {
+//                    var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
+//                    corsConfiguration.setAllowedOrigins(java.util.List.of("http://localhost:3000"));
+//                    corsConfiguration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//                    corsConfiguration.setAllowedHeaders(java.util.List.of("*"));
+//                    corsConfiguration.setAllowCredentials(true);
+//                    return corsConfiguration;
+//                }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_URLS).permitAll()
-                        .requestMatchers("/api/reports/**").hasAnyRole("USER", "MANAGER", "ADMIN")
-                        .requestMatchers("/api/team/**").hasAnyRole("MANAGER")
-                        .requestMatchers("/api/admin/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated())
                 .authenticationManager(authenticationManager)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))

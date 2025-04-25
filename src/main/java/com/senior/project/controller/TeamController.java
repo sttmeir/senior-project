@@ -30,15 +30,15 @@ public class TeamController {
     private final UserService userService;
 
     // Получить всех сотрудников (доступ для MANAGER и ADMIN)
-    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<List<UserDto>> getTeam(@AuthenticationPrincipal User manager) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userService.getTeamByManager(manager));
     }
 
-    // Добавить нового сотрудника (доступ только для ADMIN)
-    @PreAuthorize("hasRole('ADMIN')")
+//    // Добавить нового сотрудника (доступ только для ADMIN)
+//    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<UserDto> addEmployee(@RequestBody UserCreateDto userCreateDto) {
         UserDto newUser = userService.createUser(userCreateDto);
@@ -46,7 +46,7 @@ public class TeamController {
     }
 
     // Удалить сотрудника (доступ только для ADMIN)
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
         userService.deleteUser(id);

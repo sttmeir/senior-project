@@ -12,7 +12,7 @@ public class RegisterUserDto {
     private String name;
 
     @NotBlank(message = "Username must not be empty!")
-    @Size(min = 2, max = 20, message = "Your username must be between 2 and 20 characters!")
+    @Size(min = 2, max = 50, message = "Your username must be between 2 and 50 characters!")
     private String username;
 
     @NotBlank(message = "Password must not be empty!")
